@@ -1,34 +1,63 @@
 type Query {
-      agent( id: ID! ): User!
-      agents( name: String, age: Int ): [User!]!
-      posts: [Post!]!
-      post( id: ID! ): Post!
-      pictures: [Picture!]!
-      cars: [String]
-      msg(values: [String!]!): String
-    }
+  agent( id: ID! ): User!
+  agents( name: String, age: Int ): [User!]!
+  posts: [Post!]!
+  post( id: ID! ): Post!
+  pictures: [Picture!]!
+  cars: [String]
+  msg(values: [String!]!): String
+}
 
-    type User {
-      id: ID!
-      name: String!
-      age: Int
-      married: Boolean
-      average: Float
-      posts: [Post!]!
-      pictures: [Picture!]!
-    }
+enum AgentState {
+  active
+  not_active
+  trainee
+  guest
+}
 
-    type Post {
-      id: ID!
-      title: String!
-      content: String!
-      author: User!
-      picture: Picture!
-    }
+ type Mutation {
+  createAgent(data: CreateAgentInput!): User!
+  createPost(title: String!, content: String!): Post!
+  deletePost(id: ID!): Boolean!
+  deleteAgent(id: ID!): Boolean!
+  updateAgent(id: ID!, data: UpdateAgentInput!): User!
+ } 
 
-    type Picture {
-      id: ID!
-      path: String!
-      author: User!
-      post: Post!
-    }
+ input CreateAgentInput {
+  name: String!,
+  age: Int!,
+  married: Boolean
+ }
+
+ input UpdateAgentInput {
+  name: String,
+  age: Int,
+  married: Boolean,
+  average: Float
+ }
+
+type User {
+  id: ID!
+  name: String!
+  age: Int
+  married: Boolean!
+  average: Float
+  status: AgentState!
+  posts: [Post!]!
+  pictures: [Picture!]!
+}
+
+type Post {
+  id: ID!
+  title: String!
+  content: String!
+  author: User!
+  picture: Picture!
+}
+
+type Picture {
+  id: ID!
+  path: String!
+  author: User!
+  post: Post!
+}
